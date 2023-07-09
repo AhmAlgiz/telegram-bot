@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -33,7 +34,7 @@ type Weather struct {
 }
 
 func GetWeather(loc string) string {
-	req, err := http.Get(fmt.Sprintf("https://api.weatherapi.com/v1/current.json?key=%s&q=%s&aqi=no", WeatherApi, loc))
+	req, err := http.Get(fmt.Sprintf("https://api.weatherapi.com/v1/current.json?key=%s&q=%s&aqi=no", WeatherApi, url.QueryEscape(loc)))
 	if err != nil {
 		return "Weather service error. Please, try later."
 	}
@@ -52,7 +53,7 @@ func GetWeather(loc string) string {
 }
 
 func main() {
-	//telegram bot token is the 1st parameter, wheaterapi.com API is 2nd
+	//telegram bot token is the 1st parameter, wheaterapi.com API key is 2nd
 	tgToken := os.Args[1]
 	WeatherApi = os.Args[2]
 	bot, err := tgbotapi.NewBotAPI(tgToken)
